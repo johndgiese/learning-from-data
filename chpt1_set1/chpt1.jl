@@ -18,7 +18,7 @@ function simple_run(N, problem_str)
         Scale.x_continuous(minvalue=-R, maxvalue=R),
         Scale.y_continuous(minvalue=-R, maxvalue=R)
     )
-    draw(PDF("problem__$problem_str.pdf", 6inch, 6inch), p)
+    draw(PDF("problem_$problem_str.pdf", 6inch, 6inch), p)
 end
 
 
@@ -32,7 +32,6 @@ function iterations_over_rand_order(N, d, num_runs=100)
         w = rand_order_perceptron(D, (x, y, w)->iterations+=1)
         push!(iteration_spread, iterations)
     end
-    println(iteration_spread)
 
     iteration_spread
 end
@@ -48,15 +47,15 @@ end
 
 
 # Problem 1.4 a - e
-#=simple_run(20, "1_4b")=#
-#=simple_run(20, "1_4c")=#
-#=simple_run(100, "1_4d")=#
-#=simple_run(1000, "1_4e")=#
+simple_run(20, "1_4b")
+simple_run(20, "1_4c")
+simple_run(100, "1_4d")
+simple_run(1000, "1_4e")
 
 # Problem 1.4 f, g
-#=iteration_spread = iterations_over_rand_order(100, 10, 1000)=#
-#=p = plot(x=iteration_spread, Geom.histogram, Guide.xlabel("Iterations"), Guide.ylabel("Count"))=#
-#=draw(PDF("problem_1_4g.pdf", 6inch, 6inch), p)=#
+iteration_spread = iterations_over_rand_order(100, 10, 1000)
+p = plot(x=iteration_spread, Geom.histogram, Guide.xlabel("Iterations"), Guide.ylabel("Count"))
+draw(PDF("problem_1_4g.pdf", 6inch, 6inch), p)
 
 # Problem 1.4h
 dimensions = 2:10
