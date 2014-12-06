@@ -1,0 +1,179 @@
+\documentclass[11pt,letterpaper]{article}
+\usepackage{amsmath, amssymb, amsbsy}
+\usepackage{cite, graphicx}
+\usepackage{geometry}
+\usepackage{subcaption}
+
+\usepackage[usenames,dvipsnames]{xcolor} 
+
+\usepackage[utf8]{inputenc}
+
+\geometry{letterpaper,nohead,margin=1.4in}
+\parindent1em
+\parskip0pc
+\linespread{1.0}
+\pagestyle{plain}
+
+\newcommand{\com}[1]{\hspace{2em}\textrm{#1}} % comments
+\newcommand{\sinc}[0]{\textrm{sinc}}
+\newcommand{\sign}[0]{\textrm{sign}}
+\newcommand{\vv}[1]{\mathbf{#1}} % vector
+\newcommand{\p}[0]{\mathbb{P}}
+
+\title{Learning From Data Problems: Chapter I}
+\date{}
+\author{J. David Giese}
+
+\begin{document}
+\maketitle
+
+\section*{Problem 1.1}
+\begin{align*}
+    \p(\textrm{2nd B}) &=
+    \p(\textrm{BB Bag}) \cdot \p(\textrm{2nd B}|\textrm{BB Bag}) + \p(\textrm{BW Bag}) \cdot \p(\textrm{2nd B}|\textrm{BW Bag}) \\
+    &= \frac{1}{2}\cdot 1 + \frac{1}{2} \cdot 0 = \frac{1}{2}
+\end{align*}
+
+\section*{Problem 1.2}
+a) The $+1$ and $-1$ regions are separated by the line where 
+\begin{equation*}
+    \vv{w}^T\vv{x} = w_0 + w_1 x_1 + w_2 x_2 = 0
+\end{equation*}
+this can be rearranged so that
+\begin{equation*}
+    x_2 = -\frac{w_0}{w_2} - \frac{w_1}{w_2}x_1
+\end{equation*}
+thus we see $a = -\frac{w_0}{w_2}$ and $b = -\frac{w_1}{w_2}$.  The last important detail is which side is the $+1$ region and which is the $-1$ region.  The $x$-intercept of the dividing line makes a good reference point.  By looking at a point just to the right of the $x$-intercept, $x_+ = (1, -\frac{w_0}{w_1} + \delta, 0)$ we see $h(\vv{x_+}) = \sign(\vv{w}^T \vv{x_+}) = \sign(\delta \cdot w_1)$.  Thus if $w_1 > 0$ the $+$ region is the right, and vice versa. \\\\
+b) The two cases are identical, except that the $+$ region is to the right for the first one, and to the left for the second.  \\\\
+Note that the there is a free ``magnitude'' inherent in $\vv{w}$.  Two numbers are required to specify the dividing line, and a ``sign'' is required to indicate which side is the positive side and which is the negative, thus there is a free ``magnitude'' left from the third number.  For example $\vv{w} = (-1, 1, 0)$ is equivalent to $\vv{w} = (-2, 2, 0)$, but not equivalent to $\vv{w} = (1, -1, 0)$.  Interpreting problem 1.3 would be easier if a constraint where placed on $\vv{w}$ to ensure a canonical form.  I propose requiring $w_1^2 + ... + w_d^2 = 1$, which would make $w_0$ a proper threshold, and the remaining portion of $\vv{w}$ a unit vector.  This canonical form simplifies the interpretation of the limits in problem 3 properly.
+
+\section*{Problem 1.3}
+
+a) Since $\vv{w}^*$ separates the data, we know $h(\vv{x}) = \sign(\vv{w}^{*T}\vv{x}_n) = y_n \; \forall n$, thus we have
+
+\begin{equation*}
+    y_n(\vv{w}^{*T}\vv{x}_n) = y_n(\sign(\vv{w}^{*T}\vv{x}_n)|\vv{w}^{*T}\vv{x}_n|) = y_n^2 |\vv{w}^{*T}\vv{x}| = |\vv{w}^{*T}\vv{x}_n| \ge 0
+\end{equation*}
+thus we have $\rho \ge 0$.  If one further assumes that no data points fall on the dividing line, we have $\rho > 0$.
+\\\\
+b) I'm not sure why they need the first equation here, as it isn't necessary to prove the second part of the problem, but for thoroughness we have from (a)
+
+\begin{align*}
+     y(t)(\vv{x}^T(t)\vv{w}^*) &\ge \min y(t)(\vv{w}^{*T}\vv{x}(t)) > \rho \; \forall t \quad \Longrightarrow \\
+     y(t - 1)(\vv{x}^T(t - 1)\vv{w}^*) &> \rho \quad \Longrightarrow \\
+     \vv{w}^T(t - 1)\vv{w}^*  + y(t - 1)(\vv{x}^T(t - 1)\vv{w}^*) &> \vv{w}^T(t - 1)\vv{w}^* + \rho \quad \Longrightarrow \\
+     (\vv{w}^T(t - 1) + y(t - 1)\vv{x}(t - 1))\vv{w}^* &> \vv{w}^T(t - 1)\vv{w}^* + \rho \quad \Longrightarrow \\
+     \vv{w}^T(t)\vv{w}^* &> \vv{w}^T(t - 1)\vv{w}^* + \rho.
+\end{align*}
+Now for the interesting part: let $S(t)$ be the claim that $\vv{w}^T\vv{w}^* \ge t\rho$.  We know $S(0)$ is true because $\vv{w}(0) = \vv{0}$.  We assume $S(t)$, and have
+
+\begin{align*}
+ \vv{w}^T(t)\vv{w}^* &> t\rho \quad \Longrightarrow \\
+ (\vv{w}^T(t) + y(t)\vv{x}^T(t))\vv{w}^* &> t\rho +  y(t)\vv{x}^T(t)\vv{w}^* \quad \Longrightarrow \\
+ \vv{w}^T(t + 1)\vv{w}^* &> t\rho +  y(t)\vv{x}^T(t)\vv{w}^* \quad \Longrightarrow \\
+ \vv{w}^T(t + 1)\vv{w}^* &> (t + 1)\rho,
+\end{align*}
+Thus by induction we have $S(t)$ to be true for all $t$.
+\\\\
+Note that it would seem $\vv{w}$ diverges, however eventually you will run out of bad data points if the data is linearly separable.
+\\\\
+c) Using the fact that $y(t-1)\vv{w}^T(t - 1)\vv{x}(t-1) < 0$ because $y(t-1)$ and $\vv{w}^T(t-1){x}(t-1)$ have opposite signs, we have
+
+\begin{align*}
+    ||\vv{w}(t)||^2 &= ||\vv{w}(t - 1)||^2 + y(t-1)^2||\vv{x}(t - 1)||^2 + 2 y(t-1)\vv{w}^T(t - 1)\vv{x}(t-1) \\
+    &< ||\vv{w}(t - 1)||^2 + ||\vv{x}(t-1)||^2.
+\end{align*}
+
+d) Let $S(t)$ be the claim that $||\vv{w}||^2 \le tR^2$.  We know $S(0)$ is true because $\vv{w}(0) = \vv{0}$.  We assume $S(t)$, and have
+
+\begin{align*}
+    ||\vv{w}(t)||^2 &\le tR^2 \quad \Longrightarrow \\
+    ||\vv{w}(t)||^2 + ||\vv{x}(t)||^2 &\le tR^2 + ||\vv{x}(t)||^2 \quad \Longrightarrow \\
+    ||\vv{w}(t + 1)||^2 &\le tR^2 + ||\vv{x}(t)||^2 \le tR^2 + R^2 \quad \Longrightarrow \\
+    ||\vv{w}(t + 1)||^2 &\le (t + 1)R^2,
+\end{align*}
+thus we see $S(t) \Rightarrow S(t + 1)$, and thus $S(t)$ is true for all $t$ by induction.
+\\\\
+e) Using the results from (b) and (d) we have
+
+\begin{align*}
+    \vv{w}^T(t)\vv{w}^* &\ge t\rho \quad \Longrightarrow \\
+    1 &\ge \frac{\vv{w}^T(t)\vv{w}^*}{||\vv{w}^T(t)|| ||\vv{w}^*||} \ge \frac{t\rho}{||\vv{w}^T(t)|| ||\vv{w}^*||} \quad \Longrightarrow \\
+    tR^2 &\ge ||\vv{w}(t)||^2 \ge \frac{t^2 \rho^2}{||\vv{w}^*||^2} \quad \Longrightarrow \\
+    t &\le \frac{||\vv{w}^*||^2R^2}{\rho^2}. \\
+\end{align*}
+Note that the right hand side of the final inequality has two unknown quantities, $||\vv{w}^*||$ and $\rho$.  As mentioned earlier, $\rho$, and thus also $||\vv{w}^*||$, have can scale arbitrarily which means the final values may depend on the arbitrary order that the miscategorized points were selected.  Although the scaling will cancel out in the end, by using the canonical form suggested earlier, $\vv{w}$ will be more or less the same after each run.
+\\\\
+It also makes the meaning of $\rho$ consistent: the minimum normalized distance to the boundary.  This makes it possible to estimate $\rho$.  It may also be possible to estimate an upper bound on $||\vv{w}||$ using $R$, such that we could design an algorithm that would intelligently stop iteration.
+
+\section*{Problem 1.4}
+For all of the following plots, the dashed line is the hypothesis, $h$, the solid line is the target function, $f$, and the dots are the data set.
+
+\begin{figure}
+	\centering
+    \includegraphics[width=\textwidth]{problem_1_4b.pdf}
+	\caption{The solution for problem 1.4 b).  The algorithm took 1,608 iterations to find a valid hypothesis. The final hypothesis and the target function are not as good of a match as they could be.  This has to do with the implicit error measure that is used in the current perceptron algorithm; because we require that the data be linearly separable, our error measure is ``the first hypothesis that fits''.  This is a poor error measure because it is unrealistic, non-deterministic, and very loose.  It is unrealistic because noise in real datasets could lead to data sets with no match.  It is non-deterministic because there are an infinite number of equally good hypothesis (any hypothesis that fits is equally good), and the PLA will pick a hypothesis depending on the order that mis-miscategorized points are iterated over.  Finally, the hypotheses that are chosen are usually just barely correct and hug the current data.  For example, in this case the hypothesis mis-categorizes a large area unnecessarily.  This could be improved upon by using least-squares or some other error measure.}
+\end{figure}
+
+\begin{figure}
+	\centering
+    \includegraphics[width=\textwidth]{problem_1_4c.pdf}
+	\caption{The solution for problem 1.4 c).  The algorithm took 184 iterations to find a valid hypothesis.}
+\end{figure}
+
+
+\begin{figure}
+	\centering
+    \includegraphics[width=\textwidth]{problem_1_4d.pdf}
+	\caption{The solution for problem 1.4 d).  The algorithm took 34,803 iterations to find a valid hypothesis.}
+\end{figure}
+
+
+\begin{figure}
+	\centering
+    \includegraphics[width=\textwidth]{problem_1_4e.pdf}
+	\caption{The solution for problem 1.4 e).  The algorithm took 1,359,257 iterations to find a valid hypothesis.  Note that the larger the data density the longer the algorithm takes to converge, but the more accurate the response is.}
+\end{figure}
+
+
+\begin{figure}
+	\centering
+    \includegraphics[width=\textwidth]{problem_1_4g.pdf}
+	\caption{The solution for problem 1.4 f) and g).  }
+\end{figure}
+
+
+\begin{figure}
+	\centering
+    \includegraphics[width=\textwidth]{problem_1_4h.pdf}
+	\caption{The runtime does not appear to increase as the dimensionality increases.  The runtime was averaged over 100 runs (using 100 data points) for each dimension.  Intuitively this makes sense, as each dimension is updated in parallel, furthermore there is nothing in the convergence bound proved in problem 1.3 that implies dimensionality would matter.  The variability appears to decrease as the number of dimensions increases.  This is likely because $R$ will increase as the number of dimensions increases, because most of the points will exist near the edges of the $n$-sphere.}
+\end{figure}
+
+Note that the choice of $f$ impacts the convergence speed a lot.  Thus if $f$ is being randomly chosen, the approach that it is generated could potentially alter some of the trends investigated in this problem.  For example, if you pick your plane by selecting a random point in your $n$-sphere and using its direction as the normal and its magnitude as the offset, then as $n$ increases the likelihood of the plane cutting through the edge of the $n$-sphere increases, and in the extreme case all of the points may be of a single type.  On the other hand, if $f$ is chosen to slice near the center of the $n$-sphere, then this won't be the case.
+
+
+\section*{Problem 1.6}
+
+a) $\p_\textrm{binomial}(\nu = 0 | N = 10, \mu) = \dbinom{10}{0} \mu^0 (1 - \mu)^{10 - 0} = (1 - \mu)^{10}$.
+\\\\
+b, c) The probability that at least one of M samples of 10 has $\nu = 0$ is equivalent to one less the probability of all of them not having $\nu = 0$.  Let $S_i = \p(\textrm{Sample $i$ has $\nu \ne 0$})$.
+\begin{align*}
+    1 - \prod_{i = 1}^{M} S_i = 1 - (1 - \p_\textrm{binomial}(\nu = 0 | N = 10, \mu))^M
+\end{align*}
+Here are the numerical values to five places:
+\\\\
+\centering
+\begin{tabular}{|r|c|c|c|}
+    \hline
+    & $\mu = 0.05$ & $\mu = 0.5$ & $\mu = 0.8$ 
+    \\ \hline
+    (a) & 0.59874 & 0.00098 & 0.00000 
+    \\ \hline
+    (b) & 1.00000 & 0.62358 & 1.00010 
+    \\ \hline
+    (c) & 1.00000 & 1.00000 & 0.09733 
+    \\ \hline
+\end{tabular}
+
+\end{document}
+
