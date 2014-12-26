@@ -19,6 +19,8 @@
 \newcommand{\sign}[0]{\textrm{sign}}
 \newcommand{\vv}[1]{\mathbf{#1}} % vector
 \newcommand{\p}[0]{\mathbb{P}}
+\newcommand{\e}[0]{\mathbb{E}}
+\newcommand{\var}[0]{\textrm{Var}}
 
 \title{Learning From Data Problems: Chapter I}
 \date{}
@@ -162,7 +164,6 @@ b, c) The probability that at least one of M samples of 10 has $\nu = 0$ is equi
 \end{align*}
 Here are the numerical values to five places:
 \\\\
-\centering
 \begin{tabular}{|r|c|c|c|}
     \hline
     & $\mu = 0.05$ & $\mu = 0.5$ & $\mu = 0.8$ 
@@ -174,6 +175,106 @@ Here are the numerical values to five places:
     (c) & 1.00000 & 1.00000 & 0.09733 
     \\ \hline
 \end{tabular}
+
+\section*{Problem 1.8}
+a)
+\begin{align*}
+\p[t \ge \alpha] &= \int_\alpha^\infty p_t(T) dT \\
+&\le \int_\alpha^\infty p_t(T) \frac{T}{\alpha} dT \\
+&\le \int_\alpha^\infty p_t(T) \frac{T}{\alpha} dT + \int_0^\alpha p_t(T) \frac{T}{\alpha} dT \\
+&= \e[t]/\alpha.
+\end{align*}
+Why not use $<$ for the first inequality?  Given that $T/\alpha \le 1$ within the integral, this may appear justified, however if $p_t(T) = \delta(T - 1)$ and $\alpha = \lim_{\epsilon \rightarrow 0} 1 - \epsilon$, then all of the probability density is centered where $T/\alpha = 1$; this case is why the first equality is less than \emph{or equal} to.
+\\\\
+b) The random variable $(u - \mu)^2$ is non-negative, and $\e[(u - \mu)^2] \equiv \sigma^2$, thus using (a) we have $\p[(u - \mu)^2 \ge \alpha] \le \frac{\sigma^2}{\alpha}$.
+\\\\
+c) The expected value operator is linear, thus $\e[u] = \frac{1}{N}\sum_{n=1}^N \e[u_n] = \mu$.  Given that the set of $u_n$ are iid, the variance is linear $\var[u] = \frac{1}{N^2}\sum_{n=1}^N \var[u_n] = \sigma^2/N$.  Using the same logic as in (b) we have the solution.  
+
+\section*{Problem 1.9}
+
+a) Similarly to the first part of the previous problem
+\begin{align*}
+\p[t \ge \alpha] &= \int_\alpha^\infty p_t(T) dT \\
+&\le \int_\alpha^\infty p_t(T) e^{s(t - \alpha)} dT \\
+&\le \int_\alpha^\infty p_t(T) e^{s(t - \alpha)} dT + \int_{-\infty}^\alpha p_t(T) e^{s(t - \alpha)} dT \\
+&= e^{-s \alpha} \int_{-\infty}^\infty e^{st} p_t(T) dT \\
+&= e^{-s \alpha} T(s).
+\end{align*}
+b) A basic property of moment generating functions (e.g. $T(s)$) is that the m.g.f. of a sum is the product of their m.g.f.s, hence we have $\e_u(\exp(su)) = \e_u(\exp(\frac{s}{N}(u_1 + u_2 + ... + u_N)) = U(\frac{s}{N})^N$, thus we have:
+\begin{align*}
+    \p[u \ge \alpha] &\le (e^{-s\alpha} U(s))^N.
+\end{align*}
+c) For a fair coin, we have $p(t) = \frac{1}{2}(\delta(t) + \delta(t - 1))$, hence $U(s) = \frac{1}{2}(1 + e^s)$. By inspection we see that $y(s) \equiv e^{-s\alpha}U(s)$ has no global maximum, and a single global minimum so long as $0 < \alpha < 1$, hence to minimize $y$ we take its derivative with respect to $s$, equate it to 0, and solve for $s_\textrm{min}$.
+\begin{align*}
+    \frac{d}{ds} y(s) &= \frac{1}{2}[(-\alpha)e^{-\alpha s} + (1 - \alpha)e^{s(1 - \alpha)}] \quad \Longrightarrow \\
+    0 &= (-\alpha)e^{-\alpha s_\textrm{min}} + (1 - \alpha)e^{s_\textrm{min}(1 - \alpha)} \quad \Longrightarrow \\
+    0 &= (-\alpha) + e^{s_\textrm{min}} - \alpha e^{s_\textrm{min}} \quad \Longrightarrow \\
+    s_\textrm{min} &= \textrm{ln}\left(\frac{\alpha}{1 - \alpha}\right).
+\end{align*}
+Note we care about $s_\textrm{min}$ because it defines the upper bound for $\p[u_n \ge \alpha]$ ($s$ is a free parameter on the rhs of the inequality in part (b)), after substituting $s_\textrm{min}$ into $y(s)$ we have:
+\begin{align*}
+    \p[u_n \ge \alpha] &\le \frac{(1 - \alpha)^{\alpha - 1}}{2 \alpha^\alpha}.
+\end{align*}
+\\\\
+d) Because $y(s) > 0$ for all $s$, the minimum of $y(s)^N$ occurs at the same location.  Hence using the results of (b) and (c) we have
+\begin{align*}
+    \p[u \ge \alpha] &\le \frac{(1 - \alpha)^{\alpha - 1}}{2 \alpha^\alpha}^N.
+\end{align*}
+This can be converted to the form in the textbook after a bunch of mathematical juggling that I don't have time to write out.
+
+\section*{Problem 1.10}
+
+a) 
+\begin{align*}
+    E_\textrm{off} &= 
+    \begin{cases}
+        \frac{1}{2}& \text{if $M$ is even},\\
+        \frac{1}{2}\frac{M - 1}{M} & \text{if $M$ is odd and $N$ is even},\\
+        \frac{1}{2}\frac{M + 1}{M} & \text{if $M$ is odd and $N$ is odd}.
+    \end{cases}
+\end{align*}
+b) There are $2^M$ possible target functions that can generate $\mathcal{D}$.
+\\\\
+c) If $E_\textrm{off} = \frac{k}{M}$ then there are $k$ mismatches in the $M$ remaining $\vv{x}$, hence there are $\frac{M!}{k!(M - k)!}$ target functions $f$ that produce the specified off-training set error.
+\\\\
+d) The probability of having $E_\textrm{off} = \frac{k}{M}$ is the result of part (b) divided by the result of part (c), hence we have
+\begin{align*}
+    \e_f[E_\textrm{off}(h, f)] &= \sum_{k = 0}^{M} \frac{k}{M} \frac{M!}{k!(M - k)!} \frac{1}{2^M} \\
+    &= \frac{1}{2^M} \sum_{k = 0}^{M} \frac{(M - 1)!}{(k - 1)!((M - 1) - (k - 1))!}  \\
+    &= \frac{1}{2^M} \sum_{k = 0}^{M - 1} \frac{(M - 1)!}{k!((M - 1) - k)!}  \\
+    &= \frac{1}{2}.
+\end{align*}
+e) Because we are only considering the off-training-set error, whether $A_1(\mathcal{D})$ generates $\mathcal{D}$ or not, the result from (d) should stand equally well for any hypothesis.
+
+\section*{Problem 1.11}
+\begin{align*}
+    E_\textrm{in}(h, f) &= \frac{1}{N} \sum_{n = 1}^N e(h(\vv{x}_n), y_n))
+\end{align*}
+where $e$ is defined according to the risk matrices.  For example, the CIA pointwise error measure would be
+\begin{align*}
+    e(h(\vv{x}_n), y_n) &=
+    \begin{cases}
+        1000& \textrm{if $h(\vv{x}_n) = 1$ and $y_n = -1$},\\
+        1& \textrm{if $h(\vv{x}_n) = -1$ and $y_n = 1$},\\
+        0& \textrm{otherwise}.
+    \end{cases}
+\end{align*}
+
+
+\section*{Problem 1.12}
+a) We minimize $E_\textrm{in}$ by taking its derivative with respect to $h$ and solving for $h_\textrm{min}$ such that the result is 0.  Note we are assuming there is no global maximum.
+\begin{align*}
+    \frac{d E_\textrm{in}(h)}{dh} &= 2 \sum_{n = 1}^N (h - y_n)
+     = 2 h N - 2 \sum_{n = 1}^N y_n \quad \Longrightarrow \\
+     h_\textrm{min} &= \frac{1}{N} \sum_{n = 1}^N y_n.
+\end{align*}
+b) The method used in (a) doesn't work quite as well, because the derivative of the absolute value has a discontinuity.  However, within the scope of this problem, it makes sense to define the derivative of this discontinuity to be 0.  Hence we have
+\begin{align*}
+    \frac{d E_\textrm{in}(h)}{dh} &= \sum_{n = 1, h != y_n}^N \frac{h - y_n}{|h - y_n|}.
+\end{align*}
+The summand is either 1 or -1, hence the value that minimizes the summation must be a value of $h$ such that half the data points are at most $h$, and the other half are at least $h$---in other words, $h$ is the median.
+\\\\
+c) $h_\textrm{median}$ will be unaffected (unless perhaps you have a very small dataset), while $h_\textrm{mean}$ will diverge.
 
 \end{document}
 
