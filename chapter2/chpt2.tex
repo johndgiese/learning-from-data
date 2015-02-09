@@ -112,35 +112,30 @@ c) $N \ge 2682$
 
 \section*{Problem 2.2}
 First note that $\mathcal{X} = \mathbb{R}^2$ is implied by the learning model.  We see an example in Figure \ref{fig:p2_2_1} of four points that are shattered by the hypothesis set of rectangles.  Intuitively this makes sense, as we have four degrees of freedom.
-\\\\
+\begin{figure}[]
+    \centering
+    \includegraphics[width=0.8\linewidth]{problem_2_2_a.pdf}
+    \caption{Demonstrating that the hypothesis set of positive rectangles is capable of shattering four points.}
+    \label{fig:p2_2_1}
+\end{figure}
 Proving that a rectangle can not shatter five points is a bit tricker.  We do not attempt a formal proof here, but provide a high level overview of how one may approach proving such a thing.  Figure \ref{fig:p2_2_2} illustrates the approach.
 
 \begin{enumerate}
     \item Any set of points such that two are vertically or horizontally aligned can not produce all dichotomies.
-    \item Given any set of five ``non-aligned'' points, one can draw a rectangle such there is one point touching each side of the rectangle, and the fifth point is outside this rectangle (A).
-    \item It is impossible to produce the dichotomy wherein the outer point is enveloped, but the point on the adjacent side is not (B).  One may suspect that they can move this point out of the way (C), however by doing this they will always break the first assumption (if the point is on the corner) or they will break the second assumption and they will need to redefine their original rectangle (D), and thus we are no better off then not having moved the point in the first place.
+    \item Given any set of five ``non-aligned'' points, one can draw a rectangle such there is one point touching at least three sides of the rectangle, and the one or two points are outside this rectangle.
+    \item If four points are touching (A), it is impossible to produce the dichotomy wherein the outer point is enveloped, but the point on the adjacent side is not (B).  One may suspect that they can move this point out of the way (C), however by doing this they will always break the first assumption (if the point is on the corner) or they will break the second assumption and they will need to redefine their original rectangle (D), and thus we are no better off then not having moved the point in the first place.
+    \item If three points are touching (E) then we run into the same problem with both outside points.
     \item We thus see that is impossible to shatter a set of five points.
 \end{enumerate}
 
 We can thus bound our growth function: $m_\mathcal{H}(N) \le N^4 + 1$.
 
-\begin{figure}
+\begin{figure}[]
     \centering
-    \begin{subfigure}[b]{0.48\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{problem_2_2_a.pdf}
-        \caption{Demonstrating that the hypothesis set of positive rectangles is capable of shattering four points.}
-        \label{fig:p2_2_1}
-    \end{subfigure}%
-    ~
-    \begin{subfigure}[b]{0.48\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{problem_2_2_b.pdf}
-        \caption{Outline of a proof demonstrating that the hypothesis set of positive rectangles can not shatter five points.}
-        \label{fig:p2_2_2}
-    \end{subfigure}
-    \caption{Finding the break point for the hypothesis set of positive rectangles.}
-    \label{fig:p2_2}
+    \centering
+    \includegraphics[width=0.8\textwidth]{problem_2_2_b.pdf}
+    \caption{Outline of a proof demonstrating that the hypothesis set of positive rectangles can not shatter five points.}
+    \label{fig:p2_2_2}
 \end{figure}
 
 \end{document}
