@@ -29,6 +29,35 @@
 \begin{document}
 \maketitle
 
+\section*{Exercise 1.4}
+See \texttt{exercise1_4.py} for code.  Usually the algorithm takes 20 - 40 iterations to run, and matches the result fairly well.  Of course, it depends on the training dataset.
+
+\section*{Exercise 1.5}
+a) Learning \\
+b) Design \\
+c) Learning \\
+d) Design \\
+e) Design - I am not certain.  The road system is interconnected, so gathering enough data for all the possible situations may be unfeasible.  A simulation with parameters extracted from data may be more useful. \\
+
+\section*{Exercise 1.6}
+a) Reinforcement learning, or supervised learning.  In this example, what is the input space and output space?  What training samples do we have?  Assuming the input space is the set of all books, and the output space is whether a \emph{particular person} will buy that book (i.e. ${\textrm{buy}, \textrm{don't buy}}$), then one may view this as supervised learning.  However, just knowing the title of the book is probably not enough information.
+
+A more useful input space would contain details about a particular person's book preferences and even their current mood, and the output space would be, for example, 5 books we should recommend.  Unlike our first approach, this target function can be used on more than one person.  In this case, our training data is likely of the form:
+
+\begin{equation*}
+    (\textrm{individual's buying history and mood}, \textrm{suggested book}, \textrm{buy})
+\end{equation*}
+
+Thus, this is clearly a reinforcement learning problem.
+\\\\
+b) Reinforcement learning.  The input space would be a particular tic-tack-toe situation (i.e. for each of the 9 squares, whether it was "x", "o", or "blank").  The output space would be which move should be chosen by the current player.  We would reinforce moves that ultimately led to the person winning the game.
+\\\\
+c) This could be supervised learning OR unsupervised learning, depending on the training samples we had available.  As supervised learning, the output space would be the set of all movie categories, and our training samples would have the movie (or its mathematically reduced description) as the input value and the category as the output value.  As unsupervised learning, we would only know the movie (or its mathematically reduced description).
+\\\\
+d) Reinforcement learning.  The input space would, perhaps, be a melody and some parameters describing the style of music desired.  The output would be the produced music.  We would reinforce on how ``good'' listeners thought think the music is.
+\\\\
+e) Reinforcement learning.  The input space is details about the persons financial history.  The output space is the maximum credit.  We would reinforce on how much money the bank made (or lost) on the person.
+
 \section*{Problem 1.1}
 \begin{align*}
     \p(\textrm{2nd B}) &=
